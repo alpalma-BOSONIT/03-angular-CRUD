@@ -1,0 +1,26 @@
+<form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+  <label for="user-name">Username</label>
+  <input type="text" id="user-name" formControlName="username" />
+
+  <label for="password">Password</label>
+  <input type="text" id="password" formControlName="password" />
+
+  <label for="password-conf">Password</label>
+  <input type="text" id="password-conf" formControlName="passwordConfirm" />
+
+  <label for="email">Email</label>
+  <input type="text" id="email" formControlName="email" />
+  <br />
+  <label for="subscribe">Send me interesting offers</label>
+  <input type="checkbox" id="subscribe" formControlName="subscribe" />
+  <label for="country">Country:</label>
+  <select formControlName="country" id="country">
+    <option *ngFor="let country of countryOptions" [ngValue]="country">
+      {{ country }}
+    </option>
+  </select>
+  <label for="city">City</label>
+  <input type="text" formControlName="city" id="city" />
+  <br />
+  <button type="submit">{{ operationType }}</button>
+</form>
