@@ -20,7 +20,7 @@
       <td>{{ user.city }}</td>
       <td>
         <span (click)="setUpdateUser(user)" class="icon icon--action">✏</span
-        ><span class="icon icon--action">🗑</span>
+        ><span (click)="deleteUser(user)" class="icon icon--action">🗑</span>
       </td>
     </tr>
   </tbody>

@@ -55,6 +55,7 @@ export class FormComponent implements OnInit, DoCheck {
         country: this.userToUpdate.country,
         city: this.userToUpdate.city,
       });
+      this.us.setOperationType('editing');
     }
   }
 
@@ -81,10 +82,11 @@ export class FormComponent implements OnInit, DoCheck {
       id: this.userToUpdate.id,
       ...this.userForm.value,
     });
+    this.resetForm();
   }
 
   onSubmit(): void {
     if (this.operationType === 'create') this.addUser();
-    if (this.operationType === 'update') this.updateUser();
+    if (this.operationType === 'editing') this.updateUser();
   }
 }

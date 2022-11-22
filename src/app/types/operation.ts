@@ -1,1 +1,1 @@
-export type Operation = 'update' | 'create';
+export type Operation = 'update' | 'create' | 'editing';

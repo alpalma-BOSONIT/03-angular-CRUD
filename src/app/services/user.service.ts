@@ -51,4 +51,10 @@ export class UserService {
     this._operationType.next('update');
     this._userToUpdate.next(user);
   }
+
+  deleteUser(user: User): void {
+    const users = [...this._users.value];
+    const newUsers = users.filter((u) => u.id != user.id);
+    this._users.next(newUsers);
+  }
 }

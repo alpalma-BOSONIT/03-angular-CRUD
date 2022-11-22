@@ -22,5 +22,7 @@
   <label for="city">City</label>
   <input type="text" formControlName="city" id="city" />
   <br />
-  <button type="submit">{{ operationType }}</button>
+  <button type="submit">
+    {{ operationType === "editing" ? "UPDATE" : operationType }}
+  </button>
 </form>
