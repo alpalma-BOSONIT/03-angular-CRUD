@@ -74,7 +74,6 @@ export class FormComponent implements OnInit, DoCheck {
   addUser(): void {
     this.us.addUser({ id: Date.now(), ...this.userForm.value });
     this.resetForm();
-    console.log(this.users);
   }
 
   updateUser(): void {
