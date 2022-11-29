@@ -30,16 +30,6 @@ export class FormComponent implements OnInit, DoCheck {
   operationType: Operation = 'create';
   btnText: string = this.operationType === 'create' ? 'Create' : 'Update';
 
-  // userForm: FormGroup = new FormGroup({
-  //   username: new FormControl(''),
-  //   password: new FormControl(''),
-  //   passwordConfirm: new FormControl(''),
-  //   email: new FormControl(''),
-  //   subscribe: new FormControl(false),
-  //   country: new FormControl(''),
-  //   city: new FormControl(''),
-  // });
-
   userForm: FormGroup = this.fb.group({
     username: ['', [Validators.required, Validators.minLength(4)]],
     password: ['', [Validators.required, Validators.minLength(8)]],
@@ -74,21 +64,28 @@ export class FormComponent implements OnInit, DoCheck {
     }
   }
 
-  resetForm(): void {
-    this.userForm.setValue({
-      username: '',
-      password: '',
-      passwordConfirm: '',
-      email: '',
-      subscribe: false,
-      country: '',
-      city: '',
-    });
+  inputIsValid(field: string): any {
+    return (
+      this.userForm.controls[field].errors &&
+      this.userForm.controls[field].touched
+    );
+  }
+
+  renderError(field: string): string {
+    const errors = this.userForm.controls[field].errors;
+
+    if (errors?.hasOwnProperty('required')) return 'is required!';
+    if (errors?.hasOwnProperty('minlength'))
+      return `must be at least ${errors['minlength'].requiredLength} characters long!`;
+    if (errors?.hasOwnProperty('email')) return 'is not a valid format!';
+
+    return '';
   }
 
   addUser(): void {
     this.us.addUser({ id: Date.now(), ...this.userForm.value });
-    this.resetForm();
+    // this.resetForm();
+    this.userForm.reset();
   }
 
   updateUser(): void {
@@ -96,10 +93,17 @@ export class FormComponent implements OnInit, DoCheck {
       id: this.userToUpdate.id,
       ...this.userForm.value,
     });
-    this.resetForm();
+    // this.resetForm();
+    this.userForm.reset();
   }
 
   onSubmit(): void {
+    if (this.userForm.invalid) {
+      this.userForm.markAllAsTouched();
+
+      return;
+    }
+
     if (this.operationType === 'create') this.addUser();
     if (this.operationType === 'editing') this.updateUser();
   }

@@ -1,15 +1,27 @@
 <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
   <label for="user-name">Username</label>
   <input type="text" id="user-name" formControlName="username" />
+  <span *ngIf="inputIsValid('username')" class="error"
+    >Error! Username {{ renderError("username") }}</span
+  >
 
   <label for="password">Password</label>
   <input type="text" id="password" formControlName="password" />
+  <span *ngIf="inputIsValid('password')" class="error"
+    >Error! Password {{ renderError("password") }}</span
+  >
 
   <label for="password-conf">Confirm your password</label>
   <input type="text" id="password-conf" formControlName="passwordConfirm" />
+  <span *ngIf="inputIsValid('passwordConfirm')" class="error"
+    >Error! Password confirm {{ renderError("passwordConfirm") }}</span
+  >
 
   <label for="email">Email</label>
   <input type="text" id="email" formControlName="email" />
+  <span *ngIf="inputIsValid('email')" class="error"
+    >Error! Email {{ renderError("email") }}</span
+  >
   <br />
   <label for="subscribe">Send me interesting offers</label>
   <input type="checkbox" id="subscribe" formControlName="subscribe" />
@@ -19,8 +31,14 @@
       {{ country }}
     </option>
   </select>
+  <span *ngIf="inputIsValid('country')" class="error"
+    >Error! Country {{ renderError("country") }}</span
+  >
   <label for="city">City</label>
   <input type="text" formControlName="city" id="city" />
+  <span *ngIf="inputIsValid('city')" class="error"
+    >Error! City {{ renderError("city") }}</span
+  >
   <br />
   <button type="submit">
     {{ operationType === "editing" ? "UPDATE" : operationType }}
