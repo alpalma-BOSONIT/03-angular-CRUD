@@ -1,5 +1,10 @@
 import { Component, DoCheck, OnInit } from '@angular/core';
-import { FormGroup, FormControl } from '@angular/forms';
+import {
+  FormGroup,
+  FormControl,
+  FormBuilder,
+  Validators,
+} from '@angular/forms';
 import { User } from 'src/app/interfaces/user.interface';
 import { Operation } from 'src/app/types/operation';
 import { UserService } from '../../services/user.service';
@@ -25,17 +30,27 @@ export class FormComponent implements OnInit, DoCheck {
   operationType: Operation = 'create';
   btnText: string = this.operationType === 'create' ? 'Create' : 'Update';
 
-  userForm: FormGroup = new FormGroup({
-    username: new FormControl(''),
-    password: new FormControl(''),
-    passwordConfirm: new FormControl(''),
-    email: new FormControl(''),
-    subscribe: new FormControl(false),
-    country: new FormControl(''),
-    city: new FormControl(''),
+  // userForm: FormGroup = new FormGroup({
+  //   username: new FormControl(''),
+  //   password: new FormControl(''),
+  //   passwordConfirm: new FormControl(''),
+  //   email: new FormControl(''),
+  //   subscribe: new FormControl(false),
+  //   country: new FormControl(''),
+  //   city: new FormControl(''),
+  // });
+
+  userForm: FormGroup = this.fb.group({
+    username: ['', [Validators.required, Validators.minLength(4)]],
+    password: ['', [Validators.required, Validators.minLength(8)]],
+    passwordConfirm: ['', [Validators.required]], // TODO: Custom validator check password
+    email: ['', [Validators.required, Validators.email]], // TODO: custom validator check if bosonit
+    subscribe: [false],
+    country: ['', Validators.required],
+    city: ['', Validators.minLength(3)],
   });
 
-  constructor(private us: UserService) {}
+  constructor(private fb: FormBuilder, private us: UserService) {}
 
   ngOnInit(): void {
     this.us.users$.subscribe((users) => (this.users = users));
