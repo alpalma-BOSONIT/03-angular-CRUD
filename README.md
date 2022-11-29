@@ -10,10 +10,16 @@ Estoy utilizando una implementación del *Observer Pattern*. Debido a la natural
 - `src/app/services`: En el `user.service.ts` se unifica la lógica de la aplicación. Hago uso de los **BehaviorSubject** de **RxJs** para sincronizar todas las vistas que usan el servicio. La lógica para alterar estos BS también se encuentra aquí, y se llaman desde los componentes pasándoles el nuevo valor que tengan que usar para calcular el siguiente estado.
 - `src/app/types`: Por lo pronto, tan solo contiene el archivo `operations.ts`, desde el cual se exporta el tipo `type Operation = 'update' | 'create' | 'editing'`. Este tipo ha sido especialmente útil a la hora de establecer la lógica de qué operación tiene que realizar el componente de formulario.
 
+## Mejoras incorporadas (actualización 29/11/2022)
+- Implementación de la clase Form Builder para crear un formulario reactivo con una sintaxis más clara
+- Implementación de validaciones síncronas: `required`, `minlength`, `email`
+- Implementación de una validación personalizada para comprobar el *password match*. Código para la validación inspirado en [este artículo](https://www.elite-corner.com/2018/09/angular-reactive-form-validation.html)
+- Implementación de mensajes de error con base en el error emitido por el controlador (método `renderError()` implementado en el componente de formulario)
+- Eliminación del método personalizado de reseteo del formulario y utilizar el método de `reset()` nativo de los *form groups* 
 
 ## Posibles mejoras
 Presumo que hay mucho espacio para mejorar la estructura y la lógica. Entre otras cosas que muy posiblemente se me estén escapando, se me ocurre:
 
 - Debería haber tipado los datos de salida del formulario con una interfaz diferente a la del usuario.
-- Aún no hay **validaciones** implementadas. Aunque el MVP se haya alcanzado, aún dista mucho de ser un producto perfecto; y necesariamente hay que pasar por las validaciones para ello.
+- <s>Aún no hay **validaciones** implementadas. Aunque el MVP se haya alcanzado, aún dista mucho de ser un producto perfecto; y necesariamente hay que pasar por las validaciones para ello.</s> [ **Implementado!** ]
 - En el componente [form](./src/app/components/form/form.component.ts) utilizo el lifecyle hook `ngDoCheck` para detectar cuándo cambia el tipo de operación y actuar en consecuencia. No termino de estar contento con esa opción porque me conta que `DoCheck` consume muchos recursos. Sin embargo, al tratarse de una aplicación tan pequeña y tan solo evalúo una propiedad, me parece que cumple bastante bien con su cometido. Se me ocurre que una aproximación mejor habría sido utilizar un `useFactory`, lo cual nos habría ahorrado también la lógica de `operationType`. 
