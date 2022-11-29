@@ -8,6 +8,7 @@ import {
 import { User } from 'src/app/interfaces/user.interface';
 import { Operation } from 'src/app/types/operation';
 import { UserService } from '../../services/user.service';
+import { PasswordMatch } from '../../validators/password.validator';
 
 @Component({
   selector: 'app-form',
@@ -30,15 +31,20 @@ export class FormComponent implements OnInit, DoCheck {
   operationType: Operation = 'create';
   btnText: string = this.operationType === 'create' ? 'Create' : 'Update';
 
-  userForm: FormGroup = this.fb.group({
-    username: ['', [Validators.required, Validators.minLength(4)]],
-    password: ['', [Validators.required, Validators.minLength(8)]],
-    passwordConfirm: ['', [Validators.required]], // TODO: Custom validator check password
-    email: ['', [Validators.required, Validators.email]], // TODO: custom validator check if bosonit
-    subscribe: [false],
-    country: ['', Validators.required],
-    city: ['', Validators.minLength(3)],
-  });
+  userForm: FormGroup = this.fb.group(
+    {
+      username: ['', [Validators.required, Validators.minLength(4)]],
+      password: ['', [Validators.required, Validators.minLength(8)]],
+      passwordConfirm: ['', [Validators.required]], // TODO: Custom validator check password
+      email: ['', [Validators.required, Validators.email]], // TODO: custom validator check if bosonit
+      subscribe: [false],
+      country: ['', Validators.required],
+      city: ['', Validators.minLength(3)],
+    },
+    {
+      validator: PasswordMatch('password', 'passwordConfirm'),
+    }
+  );
 
   constructor(private fb: FormBuilder, private us: UserService) {}
 
@@ -49,7 +55,6 @@ export class FormComponent implements OnInit, DoCheck {
   }
 
   ngDoCheck(): void {
-    // const user: User = { ...this.userToUpdate };
     if (this.operationType === 'update') {
       this.userForm.setValue({
         username: this.userToUpdate.username,
@@ -78,13 +83,15 @@ export class FormComponent implements OnInit, DoCheck {
     if (errors?.hasOwnProperty('minlength'))
       return `must be at least ${errors['minlength'].requiredLength} characters long!`;
     if (errors?.hasOwnProperty('email')) return 'is not a valid format!';
+    if (errors?.hasOwnProperty('passwordMatch'))
+      return 'and password must match!';
 
     return '';
   }
 
   addUser(): void {
     this.us.addUser({ id: Date.now(), ...this.userForm.value });
-    // this.resetForm();
+
     this.userForm.reset();
   }
 
@@ -93,14 +100,12 @@ export class FormComponent implements OnInit, DoCheck {
       id: this.userToUpdate.id,
       ...this.userForm.value,
     });
-    // this.resetForm();
     this.userForm.reset();
   }
 
   onSubmit(): void {
     if (this.userForm.invalid) {
       this.userForm.markAllAsTouched();
-
       return;
     }
 
